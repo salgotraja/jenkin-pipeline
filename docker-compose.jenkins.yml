@@ -1,0 +1,19 @@
+services:
+  jenkins:
+    image: jenkins/jenkins:lts-jdk21
+    user: "1000:1000"
+    ports:
+      - "9292:8080"
+      - "50000:50000"
+    container_name: jenkins
+    volumes:
+      - ./jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+      - /usr/local/bin/docker-compose:/usr/local/bin/docker-compose
+    environment:
+      - JENKINS_OPTS=--prefix=/jenkins
+      - JENKINS_ARGS=--prefix=/jenkins
+      - 'JAVA_OPTS=-Djenkins.install.runSetupWizard=true -Dhudson.model.DirectoryBrowserSupport.CSP="default-src self; script-src self unsafe-inline unsafe-eval; style-src self unsafe-inline;"'
+    group_add:
+      - "984"
